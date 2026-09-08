@@ -49,8 +49,30 @@ Source 6 is an acoustic compromise: the local side comes from the microphone,
 while the remote side is picked up from the phone's output. The remote side can
 therefore be quiet through the earpiece, is most audible on speakerphone, and is
 expected to be absent with wired or Bluetooth earphones. Headset-compatible
-two-sided recording would require a rooted/system audio path or a separate,
-substantially more invasive patch that captures Rakuten's internal audio.
+two-sided recording cannot be provided by Cube's cross-application recorder.
+
+## Rakuten's native internal-audio path
+
+Follow-up inspection of the exact Rakuten Link 4.0.1 APK found a more promising
+route for a future project. Its bundled Mavenir WebRTC implementation constructs
+an `AudioMixer` with callbacks for both captured input samples and decoded output
+samples. The mixer combines the two PCM streams and can encode the result to an
+`.m4a` file through `startCallRecording` and `stopCallRecording`.
+
+Rakuten already calls this machinery from its `AI通話要約` (AI Call Summary)
+feature. The call-screen control is gated by the remote-config key
+`link_enable_ai_call_summary`; starting it also plays Rakuten's recording
+announcement and initializes a recording entry. This is genuine in-process
+capture and should retain both sides when a headset is used, unlike Cube's
+source-6 acoustic fallback.
+
+No Rakuten APK modification is included in this branch. A future prototype
+could first test the official AI Call Summary control when the account has it,
+then consider a separate Morphe patch that exposes the existing control when
+the remote flag is disabled. Such a patch would target Rakuten Link itself,
+would change its APK signature on a non-root device, could require signing in
+again, and might still be rejected by server-side feature eligibility. Recording
+announcements and applicable consent requirements must remain intact.
 
 ## Build the complete Morphe bundle
 
