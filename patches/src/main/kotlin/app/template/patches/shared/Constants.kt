@@ -358,6 +358,14 @@ val CALLRECORDER_COMPATIBILITY = Compatibility(
         targets = listOf(AppTarget(version = "2.4.281", versionCode = 281))
     )
 
+val CALLRECORDER_HELPER_COMPATIBILITY = Compatibility(
+        name = "Cube ACR App Connector",
+        packageName = "com.catalinagroup.callrecorder.helper",
+        appIconColor = 0xE53935,
+        apkFileType = ApkFileType.APK,
+        targets = listOf(AppTarget(version = "1.0.30", versionCode = 30))
+    )
+
 val CALM_COMPATIBILITY = Compatibility(
         name = "Calm",
         packageName = "com.calm.android",
