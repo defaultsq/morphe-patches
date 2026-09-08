@@ -39,6 +39,19 @@ direct call-line source. Experimental source 1 (`Microphone`) lost connected
 call audio, and source 7 (`Voice communication`) was silenced by Android when
 Rakuten opened its own source-7 stream. Those experiments are not in the patch.
 
+An additional experiment allowed this handler to use App Connector's privileged
+ADB recorder. The shell process successfully opened source 4 (`Voice call`) on
+the device's `TELEPHONY_RX` input, but Android returned muted frames for the
+entire Rakuten call. That source is tied to cellular telephony and does not carry
+Rakuten's VoIP stream, so the ADB opt-in is also not in the final patch.
+
+Source 6 is an acoustic compromise: the local side comes from the microphone,
+while the remote side is picked up from the phone's output. The remote side can
+therefore be quiet through the earpiece, is most audible on speakerphone, and is
+expected to be absent with wired or Bluetooth earphones. Headset-compatible
+two-sided recording would require a rooted/system audio path or a separate,
+substantially more invasive patch that captures Rakuten's internal audio.
+
 ## Build the complete Morphe bundle
 
 The repository requires Java 21, Android command-line tools, and GitHub package
